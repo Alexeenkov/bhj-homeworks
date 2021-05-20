@@ -1,38 +1,36 @@
 'use strict'
 
-let sliderItem = document.getElementsByClassName('slider__item');
+const sliderItems = document.getElementsByClassName('slider__item');
 const buttonSlideRight = document.getElementById('slider__arrow_next');
 const buttonSlideLeft = document.getElementById('slider__arrow_prev');
-let sliderItemArray = Array.from(sliderItem);
-let i = 1;
+const dots = document.getElementsByClassName('slider__dot');
+const sliderItemArray = Array.from(sliderItems);
 
 // Находит индекс активного слайда
-function findIndexActiveItem() {
-    i = sliderItemArray.findIndex(item => {
-        return item.className == 'slider__item slider__item_active';
-    });
-}
+let findIndexActiveItem = () => sliderItemArray.findIndex(item => item.classList.contains('slider__item_active'));
 
-buttonSlideRight.onclick = () => {
-    if (i === sliderItem.length - 2) {
-        sliderItem.item(sliderItem.length - 1).className = 'slider__item';
+function slide() {
+    let i = findIndexActiveItem();
+    sliderItems.item(i).classList.remove('slider__item_active'); // Скрываем активный слайд
+    let nextSlide = this.classList.contains('next') ? 1 : -1; // Смотрим, какая нажата кнопка, в зависимости от этого записываем 1, либо -1 в переменную
+    i += nextSlide; // Эту переменную прибавляем к индексу активного слайда (определяем индекс следующего слайда)
+    // Делаем слайдер бесконечным:
+    if (i === -1) {
+        i = sliderItems.length - 1;
+    } else if (i === sliderItems.length) {
         i = 0;
-        sliderItem.item(i).className = 'slider__item slider__item_active';
-    } else {
-        findIndexActiveItem();
-        sliderItem.item(i).className = 'slider__item';
-        sliderItem.item(i + 1).className = 'slider__item slider__item_active';
+    }
+    sliderItems.item(i).classList.add('slider__item_active'); // Показываем следующий слайд
+}
+
+// Вешаем событие клика на каждый буллет:
+for (let j = 0; j < dots.length; j++) {
+    dots.item(j).onclick = () => {
+        let i = findIndexActiveItem();
+        sliderItems.item(i).classList.remove('slider__item_active'); // При нажатии на буллет, находим активный слайд и скрываем его
+        sliderItems.item(j).classList.add('slider__item_active'); // Показываем тот, на который кликнули
     }
 }
 
-buttonSlideLeft.onclick = () => {
-    if (i === 1) {
-        sliderItem.item(0).className = 'slider__item';
-        i = sliderItem.length - 1;
-        sliderItem.item(i).className = 'slider__item slider__item_active';
-    } else {
-        findIndexActiveItem();
-        sliderItem.item(i).className = 'slider__item';
-        sliderItem.item(i - 1).className = 'slider__item slider__item_active';
-    }
-}
+buttonSlideRight.onclick = slide;
+buttonSlideLeft.onclick = slide;
