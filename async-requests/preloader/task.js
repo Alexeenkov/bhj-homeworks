@@ -10,6 +10,7 @@ requestCourseCurrency.send();
 
 requestCourseCurrency.addEventListener('readystatechange', () => {
     if (requestCourseCurrency.readyState === requestCourseCurrency.DONE) {
+        console.log(requestCourseCurrency);
         let currencies = JSON.parse(requestCourseCurrency.responseText).response.Valute;
         console.log(currencies); // извлекли объект Valute
         for (let currency in currencies) {
