@@ -34,6 +34,12 @@ input {
     cursor: pointer;
 }
 
+.btn_red {
+    display: none;
+    background-color: rgb(185, 43, 43);
+    margin-top: 10px;
+}
+
 .welcome {
     display: none;
 }
